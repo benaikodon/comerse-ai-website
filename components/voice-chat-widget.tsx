@@ -19,32 +19,67 @@ interface VoiceChatWidgetProps {
   title?: string
   description?: string
   className?: string
+  demoMode?: boolean
 }
 
 export function VoiceChatWidget({
   title = "Comerse.ai Voice Assistant",
   description = "Talk to your AI assistant using voice commands",
   className = "",
+  demoMode = false,
 }: VoiceChatWidgetProps) {
   const [showSettings, setShowSettings] = useState(false)
   const [autoSpeak, setAutoSpeak] = useState(true)
   const [voiceInput, setVoiceInput] = useState(true)
 
+  const initialDemoMessages = demoMode
+    ? [
+        {
+          id: "welcome",
+          role: "assistant",
+          content:
+            "Welcome to Comerse.ai! I'm your AI assistant, ready to provide an exceptional shopping experience. Ask me anything about our products, sizing, shipping, or returns. For a demo, try asking about our best-selling winter coat or our return policy.",
+        },
+      ]
+    : [
+        {
+          id: "welcome",
+          role: "assistant",
+          content:
+            "Hi! I'm your voice-enabled Comerse.ai Assistant. You can speak to me or type your questions. I'm here to help with products, sizing, shipping, returns, and more. How can I assist you today?",
+        },
+      ]
+
   const { messages, input, handleInputChange, handleSubmit, isLoading, setInput } = useChat({
     api: "/api/chat",
-    initialMessages: [
-      {
-        id: "welcome",
-        role: "assistant",
-        content:
-          "Hi! I'm your voice-enabled Comerse.ai Assistant. You can speak to me or type your questions. I'm here to help with products, sizing, shipping, returns, and more. How can I assist you today?",
-      },
-    ],
+    initialMessages: initialDemoMessages,
     onFinish: (message) => {
       if (autoSpeak && message.role === "assistant") {
         speak(message.content)
       }
     },
+    // Simulate impressive responses in demo mode
+    ...(demoMode && {
+      onResponse: async (response) => {
+        const text = await response.text()
+        if (text.includes("winter coat")) {
+          return new Response(
+            JSON.stringify({
+              content:
+                "Our best-selling winter coat is the 'Arctic Explorer Parka'. It's designed for extreme cold, featuring a waterproof shell, premium insulation, and a lifetime warranty. It's available in sizes XS to XXL and comes in black, navy, and forest green. Would you like to know more?",
+            }),
+          )
+        } else if (text.includes("return policy")) {
+          return new Response(
+            JSON.stringify({
+              content:
+                "We offer a 30-day hassle-free return policy. If you're not completely satisfied with your purchase, you can return it for a full refund. Items must be unworn and with original tags. We even provide a prepaid shipping label for your convenience. Can I help you with anything else?",
+            }),
+          )
+        }
+        return new Response(JSON.stringify({ content: text }))
+      },
+    }),
   })
 
   const {

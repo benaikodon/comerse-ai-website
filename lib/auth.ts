@@ -1,5 +1,4 @@
 import { supabase, supabaseAdmin } from "./supabase"
-import { createCustomer } from "./stripe"
 import { sendEmail, emailTemplates } from "./email"
 import crypto from "crypto"
 
@@ -36,17 +35,7 @@ export async function signUp({
     if (authError) throw authError
 
     if (authData.user) {
-      // Create Stripe customer
-      const stripeCustomer = await createCustomer({
-        email,
-        name: `${firstName} ${lastName}`,
-        metadata: {
-          user_id: authData.user.id,
-          company,
-        },
-      })
-
-      // Create user record
+      // Create user record with trial subscription
       const { error: dbError } = await supabaseAdmin.from("users").insert({
         id: authData.user.id,
         email,
@@ -54,7 +43,9 @@ export async function signUp({
         last_name: lastName,
         company,
         industry,
-        stripe_customer_id: stripeCustomer.id,
+        subscription_tier: "trial", // Start with trial
+        subscription_status: "active",
+        trial_ends_at: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(), // 14 days trial
       })
 
       if (dbError) throw dbError
@@ -129,4 +120,42 @@ export async function validateApiKey(key: string) {
   await supabaseAdmin.from("api_keys").update({ last_used: new Date().toISOString() }).eq("key_hash", keyHash)
 
   return data
+}
+
+// Check if user's trial has expired
+export async function checkTrialStatus(userId: string) {
+  const { data: user } = await supabaseAdmin
+    .from("users")
+    .select("trial_ends_at, subscription_tier")
+    .eq("id", userId)
+    .single()
+
+  if (!user) return { expired: true, daysLeft: 0 }
+
+  if (user.subscription_tier !== "trial") {
+    return { expired: false, daysLeft: -1 } // Not on trial
+  }
+
+  const trialEnd = new Date(user.trial_ends_at)
+  const now = new Date()
+  const daysLeft = Math.ceil((trialEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+
+  return {
+    expired: daysLeft <= 0,
+    daysLeft: Math.max(0, daysLeft),
+  }
+}
+
+// Upgrade user to paid plan (manual process)
+export async function upgradeToPaidPlan(userId: string, plan: string) {
+  const { error } = await supabaseAdmin
+    .from("users")
+    .update({
+      subscription_tier: plan,
+      subscription_status: "active",
+      trial_ends_at: null,
+    })
+    .eq("id", userId)
+
+  return { error }
 }

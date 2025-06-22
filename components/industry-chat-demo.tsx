@@ -1,189 +1,181 @@
 "use client"
 
 import { useState } from "react"
-import { useChat } from "ai/react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { MessageSquare, Send, Bot, User, Loader2, Shirt, Smartphone, Sparkles, Home } from "lucide-react"
+import {
+  Box,
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Paper,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Avatar,
+  Stack,
+} from "@mui/material"
+import { styled } from "@mui/system"
 
-const industries = [
-  { value: "fashion", label: "Fashion & Apparel", icon: Shirt, color: "text-blue-600" },
-  { value: "electronics", label: "Electronics", icon: Smartphone, color: "text-green-600" },
-  { value: "beauty", label: "Health & Beauty", icon: Sparkles, color: "text-purple-600" },
-  { value: "home", label: "Home Goods", icon: Home, color: "text-orange-600" },
-]
+// Styled Components for better visual presentation
+const ChatContainer = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(3),
+  marginBottom: theme.spacing(3),
+  borderRadius: theme.spacing(1),
+  boxShadow: theme.shadows[3],
+}))
 
-const sampleQueries = {
-  fashion: [
-    "Do you have winter coats in size medium?",
-    "What's the return policy for dresses?",
-    "Can you recommend jeans for petite sizes?",
-  ],
-  electronics: [
-    "Is this router compatible with my ISP?",
-    "What's the battery life on these headphones?",
-    "Do you offer technical support for setup?",
-  ],
-  beauty: [
-    "Is this moisturizer suitable for oily skin?",
-    "What ingredients are in this serum?",
-    "Do you have fragrance-free options?",
-  ],
-  home: [
-    "What's the weight capacity of this chair?",
-    "Do you offer assembly services?",
-    "What are the dimensions of this table?",
-  ],
-}
+const MessageBubble = styled(Box)(({ theme, isUser }) => ({
+  backgroundColor: isUser ? theme.palette.primary.light : theme.palette.grey[200],
+  color: isUser ? theme.palette.primary.contrastText : theme.palette.text.primary,
+  padding: theme.spacing(1.5),
+  borderRadius: theme.spacing(1),
+  marginBottom: theme.spacing(1),
+  maxWidth: "70%",
+  marginLeft: isUser ? "auto" : "0",
+  marginRight: isUser ? "0" : "auto",
+  textAlign: isUser ? "right" : "left",
+}))
 
-export function IndustryChatDemo() {
-  const [selectedIndustry, setSelectedIndustry] = useState("fashion")
+const InputArea = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  padding: theme.spacing(2),
+  borderTop: `1px solid ${theme.palette.divider}`,
+}))
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages } = useChat({
-    api: "/api/chat/ecommerce",
-    body: { storeType: selectedIndustry },
-    initialMessages: [
-      {
-        id: "welcome",
-        role: "assistant",
-        content:
-          "Hi! I'm your AI assistant. I'm here to help you with product information, sizing, shipping, returns, and any other questions you might have. How can I assist you today?",
-      },
-    ],
-  })
+const IndustryChatDemo = () => {
+  const [industry, setIndustry] = useState("healthcare")
+  const [userInput, setUserInput] = useState("")
+  const [chatHistory, setChatHistory] = useState([])
 
-  const handleIndustryChange = (industry: string) => {
-    setSelectedIndustry(industry)
-    setMessages([
-      {
-        id: "welcome",
-        role: "assistant",
-        content:
-          "Hi! I'm your AI assistant. I'm here to help you with product information, sizing, shipping, returns, and any other questions you might have. How can I assist you today?",
-      },
-    ])
+  const handleIndustryChange = (event) => {
+    setIndustry(event.target.value)
+    setChatHistory([]) // Clear chat when industry changes
   }
 
-  const selectedIndustryData = industries.find((ind) => ind.value === selectedIndustry)
-  const Icon = selectedIndustryData?.icon || Shirt
+  const handleInputChange = (event) => {
+    setUserInput(event.target.value)
+  }
+
+  const handleSendMessage = async () => {
+    if (userInput.trim() === "") return
+
+    const userMessage = { text: userInput, sender: "user" }
+    setChatHistory((prevHistory) => [...prevHistory, userMessage])
+    setUserInput("")
+
+    // Simulate AI response based on the selected industry
+    let aiResponseText = ""
+    switch (industry) {
+      case "healthcare":
+        aiResponseText = generateHealthcareResponse(userInput)
+        break
+      case "finance":
+        aiResponseText = generateFinanceResponse(userInput)
+        break
+      case "education":
+        aiResponseText = generateEducationResponse(userInput)
+        break
+      default:
+        aiResponseText = "I'm sorry, I can't provide a relevant response for that industry."
+    }
+
+    // Simulate a delay for a more realistic feel
+    await new Promise((resolve) => setTimeout(resolve, 750))
+
+    const aiMessage = { text: aiResponseText, sender: "ai" }
+    setChatHistory((prevHistory) => [...prevHistory, aiMessage])
+  }
+
+  // Example AI response generators (replace with actual API calls)
+  const generateHealthcareResponse = (userInput) => {
+    if (userInput.toLowerCase().includes("appointment")) {
+      return "To schedule an appointment, please call our office at 555-123-4567 or visit our website."
+    } else if (userInput.toLowerCase().includes("insurance")) {
+      return "We accept most major insurance plans. Please check with your provider to confirm coverage."
+    } else {
+      return "Thank you for your inquiry. How can I assist you further with your healthcare needs?"
+    }
+  }
+
+  const generateFinanceResponse = (userInput) => {
+    if (userInput.toLowerCase().includes("investment")) {
+      return "Investing involves risk, including the potential loss of principal. Please consult with a financial advisor before making any investment decisions."
+    } else if (userInput.toLowerCase().includes("loan")) {
+      return "We offer a variety of loan products to meet your needs. Please visit our website or contact a loan officer for more information."
+    } else {
+      return "Thank you for contacting us. What financial questions do you have today?"
+    }
+  }
+
+  const generateEducationResponse = (userInput) => {
+    if (userInput.toLowerCase().includes("enrollment")) {
+      return "Enrollment for the upcoming semester is now open. Please visit our admissions office or website for details."
+    } else if (userInput.toLowerCase().includes("courses")) {
+      return "We offer a wide range of courses in various disciplines. Please check our course catalog for a complete list."
+    } else {
+      return "Welcome! How can I help you with your educational inquiries?"
+    }
+  }
 
   return (
-    <Card className="bg-white border border-gray-200 shadow-lg">
-      <CardHeader className="border-b border-gray-100">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center text-gray-900 font-semibold">
-            <MessageSquare className="h-5 w-5 text-green-600 mr-2" />
-            Industry-Specific AI Demo
-          </CardTitle>
-          <Select value={selectedIndustry} onValueChange={handleIndustryChange}>
-            <SelectTrigger className="w-48 bg-white border-gray-200">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="bg-white border-gray-200">
-              {industries.map((industry) => {
-                const IndustryIcon = industry.icon
-                return (
-                  <SelectItem key={industry.value} value={industry.value} className="hover:bg-gray-50">
-                    <div className="flex items-center space-x-2">
-                      <IndustryIcon className={`h-4 w-4 ${industry.color}`} />
-                      <span>{industry.label}</span>
-                    </div>
-                  </SelectItem>
-                )
-              })}
-            </SelectContent>
-          </Select>
-        </div>
-        <p className="text-sm text-gray-600">See how our AI adapts to different ecommerce industries</p>
-      </CardHeader>
-      <CardContent className="p-6">
-        <div className="bg-gray-50 rounded-xl p-4 h-96 flex flex-col">
-          <div className="flex items-center space-x-2 mb-4 p-3 bg-white rounded-lg border border-gray-200">
-            <Icon className={`h-5 w-5 ${selectedIndustryData?.color}`} />
-            <span className="text-sm font-medium text-gray-900">{selectedIndustryData?.label} Store</span>
-            <Badge className="ml-auto bg-green-100 text-green-800">AI Powered</Badge>
-          </div>
+    <Container maxWidth="md">
+      <Typography variant="h4" align="center" gutterBottom>
+        Industry Chat Demo
+      </Typography>
 
-          <ScrollArea className="flex-1 pr-4">
-            <div className="space-y-4">
-              {messages.map((message) => (
-                <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-                  <div
-                    className={`max-w-[80%] rounded-xl p-3 ${
-                      message.role === "user"
-                        ? "bg-green-600 text-white"
-                        : "bg-white text-gray-900 border border-gray-200"
-                    }`}
-                  >
-                    <div className="flex items-start space-x-2">
-                      {message.role === "assistant" && <Bot className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />}
-                      {message.role === "user" && <User className="h-4 w-4 text-green-100 mt-0.5 flex-shrink-0" />}
-                      <div className="flex-1">
-                        <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                        <span
-                          className={`text-xs mt-1 block ${
-                            message.role === "user" ? "text-green-200" : "text-gray-500"
-                          }`}
-                        >
-                          {message.role === "user" ? "Customer" : "AI Assistant"} •{" "}
-                          {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-              {isLoading && (
-                <div className="flex justify-start">
-                  <div className="bg-white border border-gray-200 rounded-xl p-3 max-w-[80%]">
-                    <div className="flex items-center space-x-2">
-                      <Bot className="h-4 w-4 text-green-600" />
-                      <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
-                      <span className="text-sm text-gray-500">AI is thinking...</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </ScrollArea>
+      <FormControl fullWidth margin="normal">
+        <InputLabel id="industry-select-label">Select Industry</InputLabel>
+        <Select
+          labelId="industry-select-label"
+          id="industry-select"
+          value={industry}
+          label="Select Industry"
+          onChange={handleIndustryChange}
+        >
+          <MenuItem value="healthcare">Healthcare</MenuItem>
+          <MenuItem value="finance">Finance</MenuItem>
+          <MenuItem value="education">Education</MenuItem>
+        </Select>
+      </FormControl>
 
-          <form onSubmit={handleSubmit} className="border-t border-gray-200 pt-4 mt-4">
-            <div className="flex items-center space-x-2">
-              <Input
-                value={input}
-                onChange={handleInputChange}
-                placeholder={`Ask about ${selectedIndustryData?.label.toLowerCase()} products...`}
-                className="flex-1 bg-white border-gray-200"
-                disabled={isLoading}
-              />
-              <Button
-                type="submit"
-                size="sm"
-                className="bg-green-600 hover:bg-green-700 text-white"
-                disabled={isLoading || !input.trim()}
-              >
-                {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-              </Button>
-            </div>
-            <div className="flex flex-wrap gap-2 mt-3">
-              {sampleQueries[selectedIndustry as keyof typeof sampleQueries]?.map((query, index) => (
-                <Badge
-                  key={index}
-                  variant="outline"
-                  className="cursor-pointer hover:bg-gray-100 text-xs border-gray-300 text-gray-600"
-                  onClick={() => handleInputChange({ target: { value: query } } as any)}
-                >
-                  {query}
-                </Badge>
-              ))}
-            </div>
-          </form>
-        </div>
-      </CardContent>
-    </Card>
+      <ChatContainer>
+        {chatHistory.map((message, index) => (
+          <Stack
+            direction="row"
+            key={index}
+            alignItems="flex-start"
+            spacing={2}
+            mb={2}
+            justifyContent={message.sender === "user" ? "flex-end" : "flex-start"}
+          >
+            {message.sender === "ai" && <Avatar sx={{ bgcolor: "secondary.main" }}>AI</Avatar>}
+            <MessageBubble isUser={message.sender === "user"}>{message.text}</MessageBubble>
+            {message.sender === "user" && <Avatar sx={{ bgcolor: "primary.main" }}>You</Avatar>}
+          </Stack>
+        ))}
+      </ChatContainer>
+
+      <InputArea>
+        <TextField
+          fullWidth
+          variant="outlined"
+          placeholder="Type your message..."
+          value={userInput}
+          onChange={handleInputChange}
+          onKeyPress={(event) => {
+            if (event.key === "Enter") {
+              handleSendMessage()
+            }
+          }}
+        />
+        <Button variant="contained" color="primary" onClick={handleSendMessage} sx={{ ml: 2 }}>
+          Send
+        </Button>
+      </InputArea>
+    </Container>
   )
 }
+
+export default IndustryChatDemo

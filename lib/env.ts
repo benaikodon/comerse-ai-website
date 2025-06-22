@@ -14,12 +14,14 @@ const envSchema = z.object({
   OPENAI_API_KEY: z.string().optional(),
 
   // Payments (optional for demo)
-  STRIPE_SECRET_KEY: z.string().optional(),
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().optional(),
-  STRIPE_WEBHOOK_SECRET: z.string().optional(),
-  STRIPE_PRICE_BASIC: z.string().optional(),
-  STRIPE_PRICE_PRO: z.string().optional(),
-  STRIPE_PRICE_ENTERPRISE: z.string().optional(),
+  MONERIS_STORE_ID: z.string().optional(),
+  MONERIS_API_TOKEN: z.string().optional(),
+  MONERIS_HPP_ID: z.string().optional(),
+  MONERIS_WEBHOOK_SECRET: z.string().optional(),
+  MONERIS_PLAN_BASIC: z.string().optional(),
+  MONERIS_PLAN_PRO: z.string().optional(),
+  MONERIS_PLAN_ENTERPRISE: z.string().optional(),
+  MONERIS_COUNTRY: z.string().default("CA"),
 
   // Email (optional for demo)
   SMTP_HOST: z.string().optional(),
@@ -32,8 +34,8 @@ const envSchema = z.object({
   PINECONE_INDEX: z.string().optional(),
 
   // Security (optional for demo)
-  JWT_SECRET: z.string().optional(),
-  ENCRYPTION_KEY: z.string().optional(),
+  JWT_SECRET: z.string().default("demo-jwt-secret-key"),
+  ENCRYPTION_KEY: z.string().default("demo-encryption-key-32-chars-long"),
 
   // Rate Limiting (optional for demo)
   UPSTASH_REDIS_REST_URL: z.string().optional(),
@@ -44,7 +46,7 @@ const envSchema = z.object({
   VERCEL_ANALYTICS_ID: z.string().optional(),
 
   // Cron Jobs (optional for demo)
-  CRON_SECRET: z.string().optional(),
+  CRON_SECRET: z.string().default("demo-cron-secret"),
 })
 
 export type Env = z.infer<typeof envSchema>
@@ -56,10 +58,14 @@ try {
 } catch (error) {
   console.warn("⚠️ Some environment variables are missing, using defaults for demo")
   // Provide safe defaults for demo mode
-  env = {
-    NODE_ENV: "development",
-    NEXT_PUBLIC_SITE_URL: "http://localhost:3000",
-  } as Env
+  env = envSchema.parse({
+    NODE_ENV: process.env.NODE_ENV || "development",
+    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+    JWT_SECRET: "demo-jwt-secret-key",
+    ENCRYPTION_KEY: "demo-encryption-key-32-chars-long",
+    CRON_SECRET: "demo-cron-secret",
+    MONERIS_COUNTRY: "CA",
+  })
 }
 
 // Helper functions to check if services are configured

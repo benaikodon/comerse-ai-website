@@ -1,10 +1,15 @@
 import { Redis } from "@upstash/redis"
 import { env } from "./env"
 
-const redis = new Redis({
-  url: env.UPSTASH_REDIS_REST_URL,
-  token: env.UPSTASH_REDIS_REST_TOKEN,
-})
+let redis: Redis | null = null
+
+// Only initialize Redis if environment variables are available
+if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) {
+  redis = new Redis({
+    url: env.UPSTASH_REDIS_REST_URL,
+    token: env.UPSTASH_REDIS_REST_TOKEN,
+  })
+}
 
 export interface RateLimitResult {
   success: boolean
@@ -18,6 +23,16 @@ export async function rateLimit(
   limit = 100,
   window = 3600, // 1 hour in seconds
 ): Promise<RateLimitResult> {
+  // If Redis is not configured, allow all requests (demo mode)
+  if (!redis) {
+    return {
+      success: true,
+      remaining: limit,
+      reset: Date.now() + window * 1000,
+      limit,
+    }
+  }
+
   const key = `rate_limit:${identifier}`
 
   try {

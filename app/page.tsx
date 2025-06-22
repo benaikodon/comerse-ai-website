@@ -21,8 +21,9 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { VoiceChatBubble } from "@/components/voice-chat-bubble"
-import { IndustryChatDemo } from "@/components/industry-chat-demo"
 import { ComerseLogo } from "@/components/comerse-logo"
+import { DemoChatScenarios } from "@/components/demo-chat-scenarios"
+import { DemoMetrics } from "@/components/demo-metrics"
 
 export default function HomePage() {
   return (
@@ -55,159 +56,246 @@ export default function HomePage() {
                 Pricing
               </Link>
               <Link
-                href="#customers"
+                href="#contact"
                 className="text-sm text-gray-700 hover:text-purple-600 font-medium transition-colors"
               >
-                Customers
+                Contact
               </Link>
             </nav>
 
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" className="text-gray-700 hover:text-purple-600">
-                Sign in
-              </Button>
-              <Button className="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-6">Try for free</Button>
+              <Link href="/auth/login">
+                <Button variant="ghost" className="text-gray-700 hover:text-purple-600">
+                  Sign in
+                </Button>
+              </Link>
+              <Link href="/auth/register">
+                <Button className="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-6">
+                  Start Free Trial
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="py-16 px-6 bg-gradient-to-br from-gray-50 via-white to-purple-50">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left Column - Value Proposition */}
-            <div>
-              <Badge className="bg-purple-100 text-purple-800 border-purple-200 mb-6">
-                <Star className="w-3 h-3 mr-1" />
-                Trusted by 500+ retailers
-              </Badge>
+      <section className="py-20 px-6 bg-gradient-to-br from-gray-50 via-white to-purple-50 relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        <div className="absolute top-20 right-20 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
+        <div className="absolute top-40 left-20 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
 
-              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                Seamless and exceptional customer service
-                <span className="block text-purple-600">powered by Comerse AI</span>
-              </h1>
+        <div className="container mx-auto max-w-7xl relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Left Column - Enhanced Value Proposition */}
+            <div className="space-y-8">
+              <div className="space-y-6">
+                <Badge className="bg-purple-100 text-purple-800 border-purple-200 px-4 py-2 text-sm font-medium">
+                  <Star className="w-4 h-4 mr-2" />
+                  Trusted by 500+ retailers worldwide
+                </Badge>
 
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                Resolve 80% of customer queries instantly, reduce support costs by 50%, and boost satisfaction scores by
-                20% with AI that understands ecommerce.
-              </p>
+                <h1 className="text-6xl md:text-7xl font-bold text-gray-900 leading-tight">
+                  Transform customer service with
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">
+                    AI that understands
+                  </span>
+                </h1>
 
-              {/* Key Benefits */}
-              <div className="grid grid-cols-3 gap-4 mb-8">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600 mb-1">0.3s</div>
-                  <div className="text-sm text-gray-600">Response Time</div>
+                <p className="text-xl text-gray-600 leading-relaxed max-w-xl">
+                  Resolve 87% of customer queries instantly. Reduce support costs by 60%. Boost satisfaction scores by
+                  35% with AI trained specifically for ecommerce.
+                </p>
+              </div>
+
+              {/* Enhanced Key Benefits */}
+              <div className="grid grid-cols-3 gap-6">
+                <div className="text-center p-4 bg-white/50 rounded-xl backdrop-blur-sm border border-white/20">
+                  <div className="text-3xl font-bold text-purple-600 mb-2">0.2s</div>
+                  <div className="text-sm text-gray-600 font-medium">Avg Response</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600 mb-1">87%</div>
-                  <div className="text-sm text-gray-600">Resolution Rate</div>
+                <div className="text-center p-4 bg-white/50 rounded-xl backdrop-blur-sm border border-white/20">
+                  <div className="text-3xl font-bold text-purple-600 mb-2">87%</div>
+                  <div className="text-sm text-gray-600 font-medium">Auto-Resolved</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600 mb-1">50%</div>
-                  <div className="text-sm text-gray-600">Cost Reduction</div>
+                <div className="text-center p-4 bg-white/50 rounded-xl backdrop-blur-sm border border-white/20">
+                  <div className="text-3xl font-bold text-purple-600 mb-2">60%</div>
+                  <div className="text-sm text-gray-600 font-medium">Cost Savings</div>
                 </div>
               </div>
 
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-8 py-4">
-                  Start free trial <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+              {/* Enhanced CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/auth/register">
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-xl px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                  >
+                    Start Free Trial <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-white text-white hover:bg-white hover:text-gray-900 rounded-lg px-8 py-4"
+                  className="border-2 border-white text-white hover:bg-white hover:text-gray-900 rounded-xl px-8 py-4 text-lg font-semibold backdrop-blur-sm bg-white/10 transition-all duration-300"
                 >
                   <Play className="mr-2 h-5 w-5" />
-                  Watch demo
+                  Watch Demo
                 </Button>
               </div>
 
-              {/* Trust Indicators */}
-              <div className="flex items-center space-x-6 text-sm text-gray-500">
+              {/* Enhanced Trust Indicators */}
+              <div className="flex items-center space-x-8 text-sm text-gray-600">
                 <div className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-purple-500 mr-2" />
-                  No credit card required
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                  <span className="font-medium">Free 14-day trial</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-purple-500 mr-2" />
-                  Setup in 5 minutes
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                  <span className="font-medium">5-minute setup</span>
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                  <span className="font-medium">No credit card</span>
                 </div>
               </div>
             </div>
 
-            {/* Right Column - Interactive Demo */}
+            {/* Right Column - Enhanced Interactive Demo */}
             <div className="relative">
-              <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
-                <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
+              <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden transform rotate-1 hover:rotate-0 transition-transform duration-500">
+                <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200">
                   <div className="flex items-center space-x-3">
-                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    <span className="text-sm text-gray-600 ml-4">Customer Support Dashboard</span>
+                    <div className="flex space-x-2">
+                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    </div>
+                    <span className="text-sm text-gray-600 font-medium ml-4">Live Customer Support</span>
+                    <Badge className="bg-green-100 text-green-800 text-xs px-2 py-1">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></div>
+                      Online
+                    </Badge>
                   </div>
                 </div>
 
-                <div className="p-6">
-                  <div className="space-y-4">
-                    {/* Customer Message */}
-                    <div className="flex items-start space-x-3">
-                      <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
-                        <User className="h-4 w-4 text-white" />
+                <div className="p-6 space-y-4 h-96 overflow-y-auto">
+                  {/* Enhanced Customer Message */}
+                  <div className="flex items-start space-x-3 animate-fade-in">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                      <User className="h-5 w-5 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="bg-gray-100 rounded-2xl rounded-tl-sm p-4">
+                        <p className="text-sm text-gray-800">
+                          Hi! I ordered a winter coat last week but it's too small. Can I exchange it for a larger size?
+                          My order number is #WC-2024-1234.
+                        </p>
                       </div>
-                      <div className="flex-1">
-                        <div className="bg-gray-100 rounded-lg p-3">
-                          <p className="text-sm text-gray-800">
-                            Hi! I need to return my order #12345. The size doesn't fit.
-                          </p>
-                        </div>
-                        <div className="text-xs text-gray-500 mt-1">Sarah Johnson • 2:34 PM</div>
+                      <div className="text-xs text-gray-500 mt-2 flex items-center">
+                        <span>Sarah Chen</span>
+                        <span className="mx-2">•</span>
+                        <span>Just now</span>
+                        <Badge className="ml-2 bg-blue-100 text-blue-800 text-xs">VIP Customer</Badge>
                       </div>
                     </div>
+                  </div>
 
-                    {/* AI Response */}
-                    <div className="flex items-start space-x-3">
-                      <ComerseLogo size="sm" variant="default" showText={false} />
-                      <div className="flex-1">
-                        <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
-                          <p className="text-sm text-gray-800">
-                            I'd be happy to help you with that return! I can see your order for the blue dress. I'll
-                            process the return and email you a prepaid shipping label. You'll receive your refund within
-                            3-5 business days.
-                          </p>
+                  {/* AI Typing Indicator */}
+                  <div className="flex items-start space-x-3 animate-fade-in animation-delay-1000">
+                    <ComerseLogo size="sm" variant="default" showText={false} />
+                    <div className="flex-1">
+                      <div className="bg-purple-50 border border-purple-200 rounded-2xl rounded-tl-sm p-4">
+                        <div className="flex items-center space-x-2 text-purple-600">
+                          <div className="flex space-x-1">
+                            <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
+                            <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce animation-delay-200"></div>
+                            <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce animation-delay-400"></div>
+                          </div>
+                          <span className="text-sm font-medium">AI is analyzing your order...</span>
                         </div>
-                        <div className="text-xs text-gray-500 mt-1 flex items-center">
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Enhanced AI Response */}
+                  <div className="flex items-start space-x-3 animate-fade-in animation-delay-2000">
+                    <ComerseLogo size="sm" variant="default" showText={false} />
+                    <div className="flex-1">
+                      <div className="bg-gradient-to-br from-purple-50 to-blue-50 border border-purple-200 rounded-2xl rounded-tl-sm p-4">
+                        <p className="text-sm text-gray-800 leading-relaxed">
+                          Hi Sarah! 👋 I found your order #WC-2024-1234 for the Arctic Winter Coat in Medium. I can
+                          absolutely help you exchange it for a Large!
+                          <br />
+                          <br />
+                          I've initiated the exchange process and sent you a prepaid return label via email. Once we
+                          receive your return, we'll ship the Large size immediately.
+                          <br />
+                          <br />
+                          <strong>Expected timeline:</strong> New coat arrives in 3-5 business days! 🚚
+                        </p>
+                      </div>
+                      <div className="text-xs text-gray-500 mt-2 flex items-center justify-between">
+                        <div className="flex items-center">
                           <Brain className="h-3 w-3 mr-1" />
-                          Comerse AI • Resolved in 0.3s
+                          <span>Comerse AI</span>
+                          <span className="mx-2">•</span>
+                          <span>Resolved in 0.3s</span>
                         </div>
+                        <Badge className="bg-green-100 text-green-800 text-xs">Auto-Resolved</Badge>
                       </div>
                     </div>
+                  </div>
 
-                    {/* Success Indicator */}
-                    <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
-                      <div className="flex items-center space-x-2">
-                        <CheckCircle className="h-4 w-4 text-purple-600" />
-                        <span className="text-sm font-medium text-purple-800">Issue resolved automatically</span>
+                  {/* Success Indicator */}
+                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-4 animate-fade-in animation-delay-3000">
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="h-5 w-5 text-green-600" />
+                      <div>
+                        <span className="text-sm font-semibold text-green-800">Exchange processed successfully!</span>
+                        <p className="text-xs text-green-600 mt-1">
+                          Customer satisfaction: 5/5 ⭐ • Return label sent • Large size reserved
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Floating Stats */}
-              <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 bg-white rounded-lg shadow-lg border border-gray-200 p-4">
+              {/* Enhanced Floating Stats */}
+              <div className="absolute -right-6 top-1/3 bg-white rounded-2xl shadow-xl border border-gray-200 p-6 transform rotate-3 hover:rotate-0 transition-transform duration-300">
                 <div className="text-center">
-                  <div className="text-lg font-bold text-gray-900">4.9/5</div>
-                  <div className="text-xs text-gray-600">Customer Rating</div>
-                  <div className="flex justify-center mt-1">
+                  <div className="text-2xl font-bold text-gray-900 mb-1">4.9/5</div>
+                  <div className="text-xs text-gray-600 mb-2">Customer Rating</div>
+                  <div className="flex justify-center mb-2">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="h-3 w-3 text-yellow-400 fill-current" />
+                      <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
                     ))}
                   </div>
+                  <div className="text-xs text-gray-500">2,847 reviews</div>
+                </div>
+              </div>
+
+              <div className="absolute -left-6 bottom-1/4 bg-white rounded-2xl shadow-xl border border-gray-200 p-4 transform -rotate-2 hover:rotate-0 transition-transform duration-300">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                    <Zap className="h-4 w-4 text-green-600" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900">87% Auto-Resolved</div>
+                    <div className="text-xs text-gray-500">This month</div>
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        {/* Add this after the hero content */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+          <div className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg border border-white/20">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-sm font-medium text-gray-700">Live Demo Available</span>
           </div>
         </div>
       </section>
@@ -247,7 +335,7 @@ export default function HomePage() {
               </CardHeader>
             </Card>
 
-            <Card className="bg-white border border-gray-200 hover:shadow-lg transition-shadow text-center group hover:border-purple-200">
+            <Card className="bg-white border border-gray-200 hover:shadow-lg transition-shadow text-center group hover:border-gray-200">
               <CardHeader>
                 <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-gray-200 transition-colors">
                   <DollarSign className="h-8 w-8 text-gray-800" />
@@ -282,12 +370,17 @@ export default function HomePage() {
             <p className="text-xl text-gray-600">Try our AI with real ecommerce scenarios. No signup required.</p>
           </div>
 
-          <IndustryChatDemo />
+          <div className="space-y-8">
+            <DemoMetrics />
+            <DemoChatScenarios />
+          </div>
 
           <div className="text-center mt-12">
-            <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-8 py-4">
-              Try with your own data <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <Link href="/auth/register">
+              <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-8 py-4">
+                Start Your Free Trial <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -382,7 +475,7 @@ export default function HomePage() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Simple, transparent pricing</h2>
-            <p className="text-xl text-gray-600">Choose the plan that fits your business size and growth</p>
+            <p className="text-xl text-gray-600">Start with a free trial, upgrade when you're ready</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
@@ -391,7 +484,7 @@ export default function HomePage() {
                 <CardTitle className="text-2xl font-bold text-gray-900 mb-4">Basic</CardTitle>
                 <div className="text-4xl font-bold text-gray-900 mb-2">$500</div>
                 <div className="text-gray-600">per month</div>
-                <p className="text-sm text-gray-500 mt-4">Perfect for small retailers</p>
+                <p className="text-sm text-gray-500 mt-4">Perfect for small businesses</p>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-4 mb-8">
@@ -413,7 +506,7 @@ export default function HomePage() {
                   </li>
                 </ul>
                 <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-lg">
-                  Start free trial
+                  Contact Sales
                 </Button>
               </CardContent>
             </Card>
@@ -426,7 +519,7 @@ export default function HomePage() {
                 <CardTitle className="text-2xl font-bold text-gray-900 mb-4">Pro</CardTitle>
                 <div className="text-4xl font-bold text-gray-900 mb-2">$2,000</div>
                 <div className="text-gray-600">per month</div>
-                <p className="text-sm text-gray-500 mt-4">Ideal for mid-sized retailers</p>
+                <p className="text-sm text-gray-500 mt-4">Ideal for growing businesses</p>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-4 mb-8">
@@ -452,7 +545,7 @@ export default function HomePage() {
                   </li>
                 </ul>
                 <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-lg">
-                  Start free trial
+                  Contact Sales
                 </Button>
               </CardContent>
             </Card>
@@ -462,7 +555,7 @@ export default function HomePage() {
                 <CardTitle className="text-2xl font-bold text-gray-900 mb-4">Enterprise</CardTitle>
                 <div className="text-4xl font-bold text-gray-900 mb-2">$5,000</div>
                 <div className="text-gray-600">per month</div>
-                <p className="text-sm text-gray-500 mt-4">For large retailers</p>
+                <p className="text-sm text-gray-500 mt-4">For large organizations</p>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-4 mb-8">
@@ -488,63 +581,69 @@ export default function HomePage() {
                   </li>
                 </ul>
                 <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-lg">
-                  Contact sales
+                  Contact Sales
                 </Button>
               </CardContent>
             </Card>
           </div>
 
-          {/* Pay-as-you-go Option */}
+          {/* Trial Information */}
           <div className="text-center">
-            <Card className="bg-white border border-gray-200 max-w-2xl mx-auto">
+            <Card className="bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 max-w-2xl mx-auto">
               <CardHeader className="text-center">
-                <CardTitle className="text-2xl font-bold text-gray-900 mb-4">Pay-as-you-go</CardTitle>
-                <div className="text-3xl font-bold text-gray-900 mb-2">$0.10 - $0.50</div>
-                <div className="text-gray-600">per resolved query</div>
-                <p className="text-sm text-gray-500 mt-4">Perfect for businesses with variable support volume</p>
+                <CardTitle className="text-2xl font-bold text-gray-900 mb-4">Start with a Free Trial</CardTitle>
+                <div className="text-3xl font-bold text-purple-600 mb-2">14 Days Free</div>
+                <div className="text-gray-600">1,000 queries included</div>
+                <p className="text-sm text-gray-500 mt-4">Experience the full platform with no limitations</p>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3 mb-6 text-left">
                   <li className="flex items-center text-gray-700">
                     <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
-                    <span>No monthly commitment</span>
+                    <span>Full access to all features</span>
                   </li>
                   <li className="flex items-center text-gray-700">
                     <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
-                    <span>Pay only for successful resolutions</span>
+                    <span>No credit card required</span>
                   </li>
                   <li className="flex items-center text-gray-700">
                     <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
-                    <span>All features included</span>
+                    <span>Setup assistance included</span>
                   </li>
                 </ul>
-                <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-lg">Get started</Button>
+                <Link href="/auth/register">
+                  <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-lg py-3">
+                    Start Free Trial
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>
         </div>
       </section>
 
-      {/* Final CTA Section */}
-      <section className="py-20 px-6 bg-gray-900">
+      {/* Contact Section */}
+      <section id="contact" className="py-20 px-6 bg-white">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-4xl font-bold text-white mb-6">Ready to transform your customer support?</h2>
-          <p className="text-xl text-gray-300 mb-8">
-            Join 500+ ecommerce retailers delivering exceptional customer service with Comerse AI
+          <h2 className="text-4xl font-bold text-gray-900 mb-6">Ready to transform your customer support?</h2>
+          <p className="text-xl text-gray-600 mb-8">
+            Join hundreds of retailers delivering exceptional customer service with Comerse AI
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-8 py-4 text-lg">
-              Start free trial <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <Link href="/auth/register">
+              <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-8 py-4 text-lg">
+                Start Free Trial <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
             <Button
               size="lg"
               variant="outline"
-              className="border-white text-white hover:bg-white hover:text-gray-900 rounded-lg px-8 py-4 text-lg"
+              className="border-gray-300 text-gray-700 hover:bg-gray-50 rounded-lg px-8 py-4 text-lg"
             >
-              Schedule demo
+              Schedule Demo
             </Button>
           </div>
-          <p className="text-gray-400 text-sm">No credit card required • Setup in 5 minutes • Cancel anytime</p>
+          <p className="text-gray-500 text-sm">No credit card required • 14-day free trial • Setup in 5 minutes</p>
         </div>
       </section>
 
@@ -590,7 +689,7 @@ export default function HomePage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:text-purple-400 transition-colors">
+                  <Link href="#contact" className="hover:text-purple-400 transition-colors">
                     Contact
                   </Link>
                 </li>
